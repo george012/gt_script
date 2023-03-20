@@ -24,6 +24,10 @@ optimize_network() {
 
     # 应用更改
     sudo sysctl -p
+
+    # 设置文件描述符限制
+    echo "* soft nofile 204800" | sudo tee -a /etc/security/limits.conf
+    echo "* hard nofile 204800" | sudo tee -a /etc/security/limits.conf
 }
 
 optimize_network && wait && history -c
