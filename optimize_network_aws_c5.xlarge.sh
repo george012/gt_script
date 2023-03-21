@@ -28,8 +28,8 @@ optimize_limits_conf() {
         local item_type=$(echo "$conf_item" | awk '{print $3}')
         local item_user=$(echo "$conf_item" | awk '{print $1}')
 
-        if grep -q -E "^${item_user} ${item_type} ${item_name}" "$limits_conf_file"; then
-            sed -i -E "s|^${item_user} ${item_type} ${item_name}.*|${conf_item}|" "$limits_conf_file"
+        if grep -q -E "^${item_user}\s+${item_type}\s+${item_name}" "$limits_conf_file"; then
+            sed -i -E "s|^${item_user}\s+${item_type}\s+${item_name}.*|${conf_item}|" "$limits_conf_file"
         else
             echo "$conf_item" | tee -a "$limits_conf_file" >/dev/null
         fi
