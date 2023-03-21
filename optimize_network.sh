@@ -2,6 +2,7 @@
 
 CUSTOM_FILNAME=$(basename "$0")
 echo "file name with "$CUSTOM_FILNAME
+
 optimize_limits_conf() {
     local limits_conf_file="/etc/security/limits.conf"
     local limits_conf=(
@@ -25,11 +26,11 @@ optimize_limits_conf() {
         local item_value=$(echo "$conf_item" | awk '{print $4}')
         local item_type=$(echo "$conf_item" | awk '{print $3}')
 
-        if grep -q "$item_name" "$limits_conf_file"; then
-            sudo sed -i "/$item_name/d" "$limits_conf_file"
+        if grep -q -E "^\* ${item_type} ${item_name}" "$limits_conf_file"; then
+            sudo sed -i -E "s|^\* ${item_type} ${item_name}.*|${conf_item}|" "$limits_conf_file"
+        else
+            echo "$conf_item" | sudo tee -a "$limits_conf_file" >/dev/null
         fi
-
-        echo "$conf_item" | sudo tee -a "$limits_conf_file" >/dev/null
     done
 }
 
