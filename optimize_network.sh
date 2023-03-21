@@ -6,10 +6,10 @@ echo "file name with "$CUSTOM_FILNAME
 optimize_limits_conf() {
     local limits_conf_file="/etc/security/limits.conf"
     local limits_conf=(
-        "* soft nproc 51200"
-        "* hard nproc 51200"
-        "* soft nofile 2097152"
-        "* hard nofile 2097152"
+        "root soft nproc 51200"
+        "root hard nproc 51200"
+        "root soft nofile 2097152"
+        "root hard nofile 2097152"
     )
 
     if [ ! -f "$limits_conf_file" ]; then
@@ -27,9 +27,9 @@ optimize_limits_conf() {
         local item_type=$(echo "$conf_item" | awk '{print $3}')
 
         if grep -q -E "^\* ${item_type} ${item_name}" "$limits_conf_file"; then
-            sudo sed -i -E "s|^\* ${item_type} ${item_name}.*|${conf_item}|" "$limits_conf_file"
+            sed -i -E "s|^\* ${item_type} ${item_name}.*|${conf_item}|" "$limits_conf_file"
         else
-            echo "$conf_item" | sudo tee -a "$limits_conf_file" >/dev/null
+            "$conf_item" | tee -a "$limits_conf_file" >/dev/null
         fi
     done
 }
@@ -63,13 +63,13 @@ optimize_sysctl_conf() {
         local param_value=$(echo "$conf_item" | awk '{print $3}')
 
         if grep -q "^$param_name" "$sysctl_conf_file"; then
-            sudo sed -i "s/^$param_name.*/$conf_item/" "$sysctl_conf_file"
+            sed -i "s/^$param_name.*/$conf_item/" "$sysctl_conf_file"
         else
-            echo "$conf_item" | sudo tee -a "$sysctl_conf_file" >/dev/null
+            "$conf_item" | tee -a "$sysctl_conf_file" >/dev/null
         fi
     done
 
-    sudo sysctl -p >/dev/null
+    sysctl -p >/dev/null
 }
 
 optimize_limits_conf && wait && optimize_sysctl_conf && wait && rm -rf $CUSTOM_FILNAME && wait && echo "Optimization complete."
