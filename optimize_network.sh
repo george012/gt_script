@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 CUSTOM_FILNAME=$(basename "$0")
 echo "file name with "$CUSTOM_FILNAME
@@ -25,11 +26,12 @@ optimize_limits_conf() {
         local item_name=$(echo "$conf_item" | awk '{print $2}')
         local item_value=$(echo "$conf_item" | awk '{print $4}')
         local item_type=$(echo "$conf_item" | awk '{print $3}')
+        local item_user=$(echo "$conf_item" | awk '{print $1}')
 
-        if grep -q -E "^\* ${item_type} ${item_name}" "$limits_conf_file"; then
-            sed -i -E "s|^\* ${item_type} ${item_name}.*|${conf_item}|" "$limits_conf_file"
+        if grep -q -E "^${item_user} ${item_type} ${item_name}" "$limits_conf_file"; then
+            sed -i -E "s|^${item_user} ${item_type} ${item_name}.*|${conf_item}|" "$limits_conf_file"
         else
-            "$conf_item" | tee -a "$limits_conf_file" >/dev/null
+            echo "$conf_item" | tee -a "$limits_conf_file" >/dev/null
         fi
     done
 }
@@ -63,13 +65,13 @@ optimize_sysctl_conf() {
         local param_value=$(echo "$conf_item" | awk '{print $3}')
 
         if grep -q "^$param_name" "$sysctl_conf_file"; then
-            sed -i "s/^$param_name.*/$conf_item/" "$sysctl_conf_file"
+            sed -i "s|^$param_name.*|$conf_item|" "$sysctl_conf_file"
         else
-            "$conf_item" | tee -a "$sysctl_conf_file" >/dev/null
+            echo "$conf_item" | tee -a "$sysctl_conf_file" >/dev/null
         fi
     done
 
     sysctl -p >/dev/null
 }
 
-optimize_limits_conf && wait && optimize_sysctl_conf && wait && rm -rf $CUSTOM_FILNAME && wait && echo "Optimization complete."
+optimize_limits_conf && wait && optimize_sysctl_conf && wait && rm -rf $CUSTOM_FILNAME && wait && echo "Optimization complete"
