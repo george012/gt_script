@@ -1,7 +1,7 @@
 #!/bin/bash
 
-CUSTOM_FILNAME=optimize_network.sh
-
+CUSTOM_FILNAME=$(basename "$0")
+echo "file name with "$CUSTOM_FILNAME
 optimize_limits_conf() {
     local limits_conf_file="/etc/security/limits.conf"
     local limits_conf=(
