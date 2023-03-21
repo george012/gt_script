@@ -71,4 +71,4 @@ optimize_sysctl_conf() {
     sudo sysctl -p >/dev/null
 }
 
-optimize_limits_conf && optimize_sysctl_conf && wait && rm -rf $CUSTOM_FILNAME && echo "Optimization complete."
+optimize_limits_conf && wait && optimize_sysctl_conf && wait && rm -rf $CUSTOM_FILNAME && wait && echo "Optimization complete."
