@@ -39,7 +39,6 @@ optimize_sysctl_conf() {
         "net.core.somaxconn = 65535"
         "net.ipv4.tcp_max_syn_backlog = 65535"
         "net.ipv4.ip_local_port_range = 1024 65535"
-        "net.ipv4.tcp_tw_reuse = 1"
         "net.ipv4.tcp_sack = 1"
         "net.ipv4.tcp_timestamps = 1"
         "net.ipv4.tcp_keepalive_time = 120"
