@@ -1,5 +1,7 @@
 #!/bin/bash
 
+CUSTOM_FILNAME=optimize_network.sh
+
 optimize_limits_conf() {
     local limits_conf_file="/etc/security/limits.conf"
     local limits_conf=(
@@ -71,5 +73,4 @@ optimize_sysctl_conf() {
     sudo sysctl -p >/dev/null
 }
 
-optimize_limits_conf && optimize_sysctl_conf
-echo "Optimization complete."
+optimize_limits_conf && optimize_sysctl_conf && wait && rm -rf $CUSTOM_FILNAME && echo "Optimization complete."
