@@ -7,10 +7,10 @@ echo "file name with "$CUSTOM_FILNAME
 optimize_limits_conf() {
     local limits_conf_file="/etc/security/limits.conf"
     local limits_conf=(
-        "root soft nproc 51200"
-        "root hard nproc 51200"
-        "root soft nofile 1024000"
-        "root hard nofile 1024000"
+        "* soft nproc 51200"
+        "* hard nproc 51200"
+        "* soft nofile 1024000"
+        "* hard nofile 1024000"
     )
 
     if [ ! -f "$limits_conf_file" ]; then
