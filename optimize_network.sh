@@ -23,13 +23,12 @@ optimize_limits_conf() {
     fi
 
     for conf_item in "${limits_conf[@]}"; do
-        local item_name=$(echo "$conf_item" | awk '{print $2}')
+        local item_name=$(echo "$conf_item" | awk '{print $1 " " $2 " " $3}')
         local item_value=$(echo "$conf_item" | awk '{print $4}')
-        local item_type=$(echo "$conf_item" | awk '{print $3}')
         local item_user=$(echo "$conf_item" | awk '{print $1}')
 
-        if grep -q -E "^${item_user}\s+${item_type}\s+${item_name}\s" "$limits_conf_file"; then
-            sed -i -E "s|^(${item_user}\s+${item_type}\s+${item_name}\s+).*|\1${item_value}|" "$limits_conf_file"
+        if grep -q -E "^${item_user}\s+${item_name}\s" "$limits_conf_file"; then
+            sed -i -E "s|^(${item_user}\s+${item_name}\s+).*|\1${item_value}|" "$limits_conf_file"
         else
             echo "$conf_item" | tee -a "$limits_conf_file" >/dev/null
         fi
