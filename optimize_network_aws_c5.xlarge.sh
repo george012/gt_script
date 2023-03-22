@@ -45,8 +45,6 @@ optimize_sysctl_conf() {
         "net.ipv4.tcp_keepalive_probes = 9"
         "net.ipv4.tcp_keepalive_intvl = 10"
         "net.ipv4.tcp_fin_timeout = 30"
-        "net.ipv6.conf.all.disable_ipv6 = 1"
-        "net.ipv6.conf.default.disable_ipv6 = 1"
     )
 
     if [ ! -f "$sysctl_conf_file" ]; then
