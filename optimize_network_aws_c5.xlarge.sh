@@ -23,13 +23,9 @@ optimize_limits_conf() {
     fi
 
     for conf_item in "${limits_conf[@]}"; do
-        local item_name=$(echo "$conf_item" | awk '{print $1 " " $2 " " $3}')
-        local item_value=$(echo "$conf_item" | awk '{print $4}')
-        local item_user=$(echo "$conf_item" | awk '{print $1}')
-
-        if grep -q -E "^${item_user}\s+${item_name}\s" "$limits_conf_file"; then
-            # 如果存在相同的配置项，则先删除原有的配置项
-            sed -i -E "/^${item_user}\s+${item_name}\s/d" "$limits_conf_file"
+        if grep -q -E "^${conf_item}\$" "$limits_conf_file"; then
+            # 如果存在相同的配置项，则删除整行
+            sed -i -E "/^${conf_item}\$/d" "$limits_conf_file"
         fi
 
         # 添加新的配置项
