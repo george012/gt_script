@@ -28,10 +28,12 @@ optimize_limits_conf() {
         local item_user=$(echo "$conf_item" | awk '{print $1}')
 
         if grep -q -E "^${item_user}\s+${item_name}\s" "$limits_conf_file"; then
-            sed -i -E "s|^(${item_user}\s+${item_name}\s+).*|\1${item_value}|" "$limits_conf_file"
-        else
-            echo "$conf_item" >> "$limits_conf_file"
+            # 如果存在相同的配置项，则先删除原有的配置项
+            sed -i -E "/^${item_user}\s+${item_name}\s/d" "$limits_conf_file"
         fi
+
+        # 添加新的配置项
+        echo "$conf_item" >> "$limits_conf_file"
     done
 }
 
