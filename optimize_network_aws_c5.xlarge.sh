@@ -30,7 +30,7 @@ optimize_limits_conf() {
         if grep -q -E "^${item_user}\s+${item_name}\s" "$limits_conf_file"; then
             sed -i -E "s|^(${item_user}\s+${item_name}\s+).*|\1${item_value}|" "$limits_conf_file"
         else
-            echo "$conf_item" | tee -a "$limits_conf_file" >/dev/null
+            echo "$conf_item" >> "$limits_conf_file"
         fi
     done
 }
@@ -38,7 +38,6 @@ optimize_limits_conf() {
 optimize_sysctl_conf() {
     local sysctl_conf_file="/etc/sysctl.conf"
     local sysctl_conf=(
-        "fs.file-max = 2097152"
         "net.core.somaxconn = 65535"
         "net.ipv4.tcp_max_syn_backlog = 65535"
         "net.ipv4.ip_local_port_range = 1024 65535"
@@ -61,15 +60,16 @@ optimize_sysctl_conf() {
         cp "$sysctl_conf_file" "$sysctl_conf_file.bak"
     fi
 
-    for conf_item in "${sysctl_conf[@]}"; do
-        local param_name=$(echo "$conf_item" | awk '{print $1}')
-        local param_value=$(echo "$conf_item" | awk '{print $3}')
+    for conf_item in "${limits_conf[@]}"; do
+        local item_name=$(echo "$conf_item" | awk '{print $1 " " $2 " " $3}')
+        local item_value=$(echo "$conf_item" | awk '{print $4}')
+        local item_user=$(echo "$conf_item" | awk '{print $1}')
 
-        if grep -q "^$param_name" "$sysctl_conf_file"; then
-            sed -i "s|^$param_name.*|$conf_item|" "$sysctl_conf_file"
-        else
-            echo "$conf_item" | tee -a "$sysctl_conf_file" >/dev/null
+        if grep -q -E "^${item_user}\s+${item_name}\s" "$limits_conf_file"; then
+            sed -i -E "/^${item_user}\s+${item_name}\s/d" "$limits_conf_file"
         fi
+
+        echo "$conf_item" >> "$limits_conf_file"
     done
 
     sysctl -p >/dev/null
