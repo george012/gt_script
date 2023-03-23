@@ -41,7 +41,7 @@ optimize_sysctl_conf() {
         "net.ipv4.ip_local_port_range = 1024 65535"
         "net.ipv4.tcp_sack = 1"
         "net.ipv4.tcp_timestamps = 1"
-        "net.ipv4.tcp_keepalive_time = 120"
+        "net.ipv4.tcp_keepalive_time = 600"
         "net.ipv4.tcp_keepalive_probes = 9"
         "net.ipv4.tcp_keepalive_intvl = 10"
         "net.ipv4.tcp_fin_timeout = 30"
