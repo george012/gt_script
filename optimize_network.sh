@@ -59,15 +59,14 @@ optimize_sysctl_conf() {
     fi
 
     for conf_item in "${sysctl_conf[@]}"; do
-        local item_name=$(echo "$conf_item" | awk '{print $1 " " $2 " " $3}')
-        local item_value=$(echo "$conf_item" | awk '{print $4}')
-        local item_user=$(echo "$conf_item" | awk '{print $1}')
+        local item_name=$(echo "$conf_item" | awk -F'=' '{print $1}')
+        local item_value=$(echo "$conf_item" | awk -F'=' '{print $2}')
 
-        if grep -q -E "^${item_user}\s+${item_name}\s" "$sysctl_conf_file"; then
-            sed -i -E "/^${item_user}\s+${item_name}\s/d" "$sysctl_conf_file"
+        if grep -q -E "^${item_name}\s*=" "$sysctl_conf_file"; then
+            sed -i -E "s/^${item_name}\s*=.*/${conf_item}/" "$sysctl_conf_file"
+        else
+            echo "$conf_item" >> "$sysctl_conf_file"
         fi
-
-        echo "$conf_item" >> "$sysctl_conf_file"
     done
 
     sysctl -p >/dev/null
