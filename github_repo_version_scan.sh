@@ -40,32 +40,37 @@ check_need_build(){
 }
 
 handle_input(){
-    local current_repo_rul=$1
-    local remote_repo_url=$2
+    if [[ $1 == "--check_need_update" ]]; then
+        local current_repo_rul=$2
+        local remote_repo_url=$3
 
 
-    if [[ $current_repo_rul == "" ]] || [[ $current_repo_rul == " " ]] || [[ $remote_repo_url == "" ]] || [[ $remote_repo_url == " " ]]; then
-        echo "{\"code\":-1,\"msg\":\"Input Prarms Error：Prarms Cannot Be Empty\"}"
+        if [[ $current_repo_rul == "" ]] || [[ $current_repo_rul == " " ]] || [[ $remote_repo_url == "" ]] || [[ $remote_repo_url == " " ]]; then
+            echo "{\"code\":-1,\"msg\":\"Input Prarms Error：Prarms Cannot Be Empty\"}"
+            return
+        fi
+
+        if [[ $(echo "$current_repo_rul" | cut -d'/' -f1) != "github.com" ]] || [[ $(echo "$remote_repo_url" | cut -d'/' -f1) != "github.com" ]]; then
+            echo "{\"code\":-1,\"msg\":\"This Script Only github.com is supported\"}"
+            return
+        fi
+
+        local current_repo_suffix=$(echo "$current_repo_rul" | cut -d'/' -f2-)
+        local remote_repo_suffix=$(echo "$remote_repo_url" | cut -d'/' -f2-)
+
+        local current_repo_latest_version=$(get_repo_version "$current_repo_suffix")
+        if [[ $current_repo_latest_version == "" ]] || [[ $current_repo_latest_version == " " ]]; then
+            echo "true" | tr -d '\r\n'
+            return
+        fi
+
+        local remote_repo_latest_version=$(get_repo_version "$remote_repo_suffix")
+
+        check_need_build "$current_repo_latest_version" "$remote_repo_latest_version"
+    else
+        echo "{\"code\":-1,\"msg\":\"Methods not yet supported\"}"
         return
     fi
-
-    if [[ $(echo "$current_repo_rul" | cut -d'/' -f1) != "github.com" ]] || [[ $(echo "$remote_repo_url" | cut -d'/' -f1) != "github.com" ]]; then
-        echo "{\"code\":-1,\"msg\":\"This Script Only github.com is supported\"}"
-        return
-    fi
-
-    local current_repo_suffix=$(echo "$current_repo_rul" | cut -d'/' -f2-)
-    local remote_repo_suffix=$(echo "$remote_repo_url" | cut -d'/' -f2-)
-
-    local current_repo_latest_version=$(get_repo_version "$current_repo_suffix")
-    if [[ $current_repo_latest_version == "" ]] || [[ $current_repo_latest_version == " " ]]; then
-        echo "true" | tr -d '\r\n'
-        return
-    fi
-
-    local remote_repo_latest_version=$(get_repo_version "$remote_repo_suffix")
-
-    check_need_build "$current_repo_latest_version" "$remote_repo_latest_version"
 }
 
 handle_input "$@"

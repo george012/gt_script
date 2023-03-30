@@ -4,7 +4,7 @@
 - [2. use`optimize_network`51200 concurrent](#2-useoptimize_network51200-concurrent)
 - [3. use`install_docker`](#3-useinstall_docker)
 - [4. use`install_redis`](#4-useinstall_redis)
-- [4. use`get_github_repo_version_manager`（仅仅支持Github）](#4-useget_github_repo_version_manager仅仅支持github)
+- [4. use`github_repo_version_scan`（仅仅支持Github）](#4-usegithub_repo_version_scan仅仅支持github)
   - [Simple:](#simple)
 
 <!-- /TOC -->
@@ -30,7 +30,7 @@ wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_scrip
 wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/install_redis.sh && chmod a+x ./install_redis.sh && ./install_redis.sh
 ```
 
-# 4. use`get_github_repo_version_manager`（仅仅支持Github）
+# 4. use`github_repo_version_scan`（仅仅支持Github）
 *   plase edit `$CURRENT_REPO_URI` `$REMOTE_REPO_URI`
 
 ```
@@ -41,5 +41,5 @@ wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_scrip
 *   simple: `$CURRENT_REPO_URI` = `github.com/currenttuser/current_repo`
 *   simple: `$CURRENT_REPO_URI` = `github.com/remoteuser/remote_repo`
 ```
-wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/get_github_repo_version_manager.sh && chmod a+x ./get_github_repo_version_manager.sh && ./get_github_repo_version_manager.sh github.com/currenttuser/current_repo github.com/remoteuser/remote_repo
+wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/github_repo_version_scan.sh && chmod a+x ./github_repo_version_scan.sh && ./github_repo_version_scan.sh --check_need_update github.com/currenttuser/current_repo github.com/remoteuser/remote_repo
 ```
