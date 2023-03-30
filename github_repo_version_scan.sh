@@ -67,9 +67,11 @@ handle_input(){
         local remote_repo_latest_version=$(get_repo_version "$remote_repo_suffix")
 
         check_need_build "$current_repo_latest_version" "$remote_repo_latest_version"
+    elif [[ $1 == "--get_latest_version" ]]; then
+        local latest_version=$(get_repo_version "$remote_repo_suffix")
+        echo $latest_version
     else
         echo "{\"code\":-1,\"msg\":\"Methods not yet supported\"}"
-        return
     fi
 }
 

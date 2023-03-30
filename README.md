@@ -5,7 +5,9 @@
 - [3. use`install_docker`](#3-useinstall_docker)
 - [4. use`install_redis`](#4-useinstall_redis)
 - [4. use`github_repo_version_scan`（仅仅支持Github）](#4-usegithub_repo_version_scan仅仅支持github)
-  - [Simple:](#simple)
+    - [自动监测两个同步库是否需要更新](#自动监测两个同步库是否需要更新)
+    - [获取指定库的latest版本名称](#获取指定库的latest版本名称)
+    - [Simple:](#simple)
 
 <!-- /TOC -->
 
@@ -31,11 +33,15 @@ wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_scrip
 ```
 
 # 4. use`github_repo_version_scan`（仅仅支持Github）
+## 自动监测两个同步库是否需要更新
 *   plase edit `$CURRENT_REPO_URI` `$REMOTE_REPO_URI`
 
 ```
-wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/install_redis.sh && chmod a+x ./install_redis.sh && ./install_redis.sh $CURRENT_REPO_URI $REMOTE_REPO_URI
+wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/github_repo_version_scan.sh && chmod a+x ./github_repo_version_scan.sh && ./github_repo_version_scan.sh --check_need_update $CURRENT_REPO_URI $REMOTE_REPO_URI
 ```
+
+## 获取指定库的latest版本名称
+wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/github_repo_version_scan.sh && chmod a+x ./github_repo_version_scan.sh && ./github_repo_version_scan.sh --get_latest_version $REMOTE_REPO_URI
 
 ## Simple:
 *   simple: `$CURRENT_REPO_URI` = `github.com/currenttuser/current_repo`
