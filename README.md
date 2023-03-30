@@ -41,8 +41,9 @@ wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_scrip
 ```
 
 ## 获取指定库的latest版本名称
+```
 wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/github_repo_version_scan.sh && chmod a+x ./github_repo_version_scan.sh && ./github_repo_version_scan.sh --get_latest_version $REMOTE_REPO_URI
-
+```
 ## Simple:
 *   simple: `$CURRENT_REPO_URI` = `github.com/currenttuser/current_repo`
 *   simple: `$CURRENT_REPO_URI` = `github.com/remoteuser/remote_repo`
