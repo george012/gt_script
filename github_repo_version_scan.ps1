@@ -44,13 +44,16 @@ function Get-RepoLatestUploadUrl {
     $LatestReleaseInfo = Invoke-RestMethod -Uri "https://api.github.com/repos/$Repo/releases/latest"
     return $LatestReleaseInfo.upload_url
 }
-
 function Check-FileExistFromRepoLatest {
     param (
         [string]$Repo,
-        [string]$FileName
+        [string]$FileName,
+        [string]$Token
     )
-    $Response = Invoke-RestMethod -Uri "https://api.github.com/repos/$Repo/releases/latest"
+    $Headers = @{
+        "Authorization" = "Bearer $Token"
+    }
+    $Response = Invoke-RestMethod -Uri "https://api.github.com/repos/$Repo/releases/latest" -Headers $Headers
     $AssetNames = $Response.assets.name
 
     $AssetExists = "no"
@@ -62,4 +65,3 @@ function Check-FileExistFromRepoLatest {
     }
     return $AssetExists
 }
-
