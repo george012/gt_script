@@ -22,9 +22,9 @@ get_repo_version(){
 check_need_build(){
     remote_version=$2
     this_version=$1
-    need_build=false
+    need_build="no"
     if [[ ${this_version:0:1} != "v" ]]; then
-        need_build=true
+        need_build="yes"
         echo $need_build
         return
     fi
@@ -35,7 +35,7 @@ check_need_build(){
 
     small_version=$(echo "$sorted_versions" | head -n1)
     if [ "$remote_version_no_v" != "$small_version" ]; then
-        need_build=true
+        need_build="yes"
         break
     fi
     echo $need_build
@@ -53,10 +53,10 @@ get_repo_latest_upload_url(){
 check_file_exist_from_repo_latest(){
     local response=$(curl --silent https://api.github.com/repos/$1/releases/latest)
     local assetNames=$(echo "$response" | grep -oP '"name": "\K[^"]+')
-    assetExists=false
+    assetExists="no"
     for name in $assetNames; do
       if [[ "$name" == "$2" ]]; then
-        assetExists=true
+        assetExists="yes"
         break
       fi
     done
@@ -84,7 +84,7 @@ handle_input(){
 
         local current_repo_latest_version=$(get_repo_version "$current_repo_suffix")
         if [[ $current_repo_latest_version == "" ]] || [[ $current_repo_latest_version == " " ]]; then
-            local isTrue=true
+            local isTrue="yes"
             echo $isTrue
             return
         fi
