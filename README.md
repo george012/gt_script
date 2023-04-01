@@ -8,6 +8,8 @@
     - [自动监测两个同步库是否需要更新](#自动监测两个同步库是否需要更新)
     - [获取指定库的latest版本名称](#获取指定库的latest版本名称)
     - [Simple:](#simple)
+    - [获取指定库的latest版本uoload_url](#获取指定库的latest版本uoload_url)
+    - [Simple:](#simple-1)
 
 <!-- /TOC -->
 
@@ -49,4 +51,11 @@ wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_scrip
 *   simple: `$CURRENT_REPO_URI` = `github.com/remoteuser/remote_repo`
 ```
 wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/github_repo_version_scan.sh && chmod a+x ./github_repo_version_scan.sh && ./github_repo_version_scan.sh --check_need_update github.com/currenttuser/current_repo github.com/remoteuser/remote_repo
+```
+
+## 获取指定库的latest版本uoload_url
+## Simple:
+*   simple: `$CURRENT_REPO_URI` = `github.com/currenttuser/current_repo`
+```
+wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/github_repo_version_scan.sh && chmod a+x ./github_repo_version_scan.sh && ./github_repo_version_scan.sh --get_latest_upload_url github.com/currenttuser/current_repo
 ```

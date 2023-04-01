@@ -39,6 +39,15 @@ check_need_build(){
     echo "false" | tr -d '\r\n'
 }
 
+get_repo_latest_upload_url(){
+    local LATEST_UPLOAD_URL=""
+    local LATEST_RELEASE_INFO=$(curl --silent https://api.github.com/repos/$1/releases/latest)
+    if ! echo "$LATEST_RELEASE_INFO" | grep -q "Not Found"; then
+        LATEST_UPLOAD_URL=$(parse_json "$LATEST_RELEASE_INFO" "upload_url"),label}
+    fi
+    echo $LATEST_UPLOAD_URL
+}
+
 handle_input(){
     if [[ $1 == "--check_need_update" ]]; then
         local current_repo_rul=$2
@@ -70,6 +79,9 @@ handle_input(){
     elif [[ $1 == "--get_latest_version" ]]; then
         local latest_version=$(get_repo_version "$(echo "$2" | cut -d'/' -f2-)")
         echo $latest_version | tr -d '\r\n'
+    elif [[ $1 == "--get_latest_upload_url" ]]; then
+        local latest_upload_url=$(get_repo_latest_upload_url "$(echo "$2" | cut -d'/' -f2-)")
+        echo $latest_upload_url | tr -d '\r\n'
     else
         echo "{\"code\":-1,\"msg\":\"Methods not yet supported\"}"
     fi
