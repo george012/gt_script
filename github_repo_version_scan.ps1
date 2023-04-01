@@ -63,6 +63,3 @@ function Check-FileExistFromRepoLatest {
     return $AssetExists
 }
 
-# 示例：检查文件是否存在于指定仓库的最新版本中
-$FileExists = Check-FileExistFromRepoLatest -Repo "george012/libhv-build" -FileName "libhv_linux_x64_arm64.zip"
-Write-Output $FileExists
