@@ -12,7 +12,8 @@
     - [6.3. 获取指定库的latest版本upload_url](#63-获取指定库的latest版本upload_url)
         - [6.3.1. Simple:](#631-simple)
     - [6.3. 检查latest版本assets中是否存在指定文件](#63-检查latest版本assets中是否存在指定文件)
-        - [6.3.1. Simple:](#631-simple-1)
+        - [6.3.1. Simple--Linux:](#631-simple--linux)
+        - [Simple--Windows](#simple--windows)
 
 <!-- /TOC -->
 
@@ -67,7 +68,14 @@ wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_scrip
 ```
 
 ## 6.3. 检查latest版本assets中是否存在指定文件
-### 6.3.1. Simple:
+### 6.3.1. Simple--Linux:
 ```
 wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/github_repo_version_scan.sh && chmod a+x ./github_repo_version_scan.sh && ./github_repo_version_scan.sh --check_file_exist_from_repo_latest github.com/currenttuser/current_repo testfile.zip
+```
+### Simple--Windows
+```
+Invoke-WebRequest -Uri https://raw.githubusercontent.com/george012/gt_script/master/github_repo_version_scan.ps1 -OutFile github_repo_version_scan.ps1
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+$file_exist = Check-FileExistFromRepoLatest -Repo "github.com/$env:GITHUB_REPOSITORY" -FileName "$env:over_file_name"
+echo "file_exist=$file_exist" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 ```
