@@ -22,8 +22,10 @@ get_repo_version(){
 check_need_build(){
     remote_version=$2
     this_version=$1
+    need_build=false
     if [[ ${this_version:0:1} != "v" ]]; then
-        echo "true" | tr -d '\r\n'
+        need_build=true
+        echo $need_build
         return
     fi
 
@@ -33,10 +35,10 @@ check_need_build(){
 
     small_version=$(echo "$sorted_versions" | head -n1)
     if [ "$remote_version_no_v" != "$small_version" ]; then
-        echo "true" | tr -d '\r\n'
-        return
+        need_build=true
+        break
     fi
-    echo "false" | tr -d '\r\n'
+    echo $need_build
 }
 
 get_repo_latest_upload_url(){
@@ -82,7 +84,8 @@ handle_input(){
 
         local current_repo_latest_version=$(get_repo_version "$current_repo_suffix")
         if [[ $current_repo_latest_version == "" ]] || [[ $current_repo_latest_version == " " ]]; then
-            echo "true" | tr -d '\r\n'
+            local isTrue=true
+            echo $isTrue
             return
         fi
 
