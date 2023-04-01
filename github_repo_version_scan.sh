@@ -48,6 +48,19 @@ get_repo_latest_upload_url(){
     echo $LATEST_UPLOAD_URL
 }
 
+check_file_exist_from_repo_latest(){
+    local response=$(curl --silent https://api.github.com/repos/$1/releases/latest)
+    local assetNames=$(echo "$response" | grep -oP '"name": "\K[^"]+')
+    assetExists=false
+    for name in $assetNames; do
+      if [[ "$name" == "$2" ]]; then
+        assetExists=true
+        break
+      fi
+    done
+    echo $assetExists
+}
+
 handle_input(){
     if [[ $1 == "--check_need_update" ]]; then
         local current_repo_rul=$2
@@ -82,6 +95,9 @@ handle_input(){
     elif [[ $1 == "--get_latest_upload_url" ]]; then
         local latest_upload_url=$(get_repo_latest_upload_url "$(echo "$2" | cut -d'/' -f2-)")
         echo $latest_upload_url | tr -d '\r\n'
+    elif [[ $1 == "--check_file_exist_from_repo_latest" ]]; then
+        local is_exist=$(check_file_exist_from_repo_latest "$(echo "$2" | cut -d'/' -f2-)" "$3")
+        echo $is_exist | tr -d '\r\n'
     else
         echo "{\"code\":-1,\"msg\":\"Methods not yet supported\"}"
     fi
