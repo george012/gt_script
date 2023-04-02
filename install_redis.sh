@@ -16,7 +16,7 @@ install_redis(){
     && wait \
     && sudo apt-get install redis \
     && wait \
-    && sudo systemctl enable --now docker
+    && sudo systemctl enable --now redis
 }
 
-install_redis && wait && rm -rf $SCRIPT_NAME && wait && echo "redis is installed"
+pre_config && wait && install_redis && wait && rm -rf $SCRIPT_NAME && wait && echo "redis is installed"
