@@ -14,7 +14,7 @@ install_redis(){
     && wait \
     && sudo apt update \
     && wait \
-    && sudo apt-get install redis \
+    && sudo apt-get -y install redis \
     && wait \
     && sudo systemctl enable --now redis
 }
