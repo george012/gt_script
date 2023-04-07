@@ -133,7 +133,6 @@ EOF
 
 enable_service(){
     sudo systemctl daemon-reload
-    sudo systemctl enable --now acme-$INPUT_DOMAIN.service
     sudo systemctl enable --now acme-$INPUT_DOMAIN.timer
 }
 
@@ -151,7 +150,8 @@ onkey_install(){
         && wait \
         && create_acme_service \
         && wait \
-        && create_acme_service_timer
+        && create_acme_service_timer \
+        && enable_service
 
         return 0
     else
@@ -172,7 +172,8 @@ steps_install(){
         && wait \
         && create_acme_service \
         && wait \
-        && create_acme_service_timer
+        && create_acme_service_timer \
+        && enable_service
 
         return 0
     else
