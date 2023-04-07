@@ -137,7 +137,7 @@ enable_service(){
     sudo systemctl enable --now acme-$INPUT_DOMAIN.timer
 }
 
-install_auto_ssl_service(){
+onkey_install(){
     if nginx_is_runing; then
         input_domain \
         && input_email \
@@ -160,19 +160,84 @@ install_auto_ssl_service(){
     fi
 }
 
-input_nginx_web_root=$1
-if [[ -z "${input_nginx_web_root// }" ]]; then
-    echo "Sed default Web Root [$NGINX_WEB_ROOT]"
-else
-    NGINX_WEB_ROOT=$1
-fi
+steps_install(){
+    if nginx_is_runing; then
+        create_nginx_vhost \
+        && wait \
+        && install_acme \
+        && wait \
+        && request_cert \
+        && wait \
+        && install_cert \
+        && wait \
+        && create_acme_service \
+        && wait \
+        && create_acme_service_timer
 
-pre_config
-if install_auto_ssl_service; then
-    echo "$INPUT_DOMAIN auto ssl service installed"
-    echo "$INPUT_DOMAIN private-key at [$NGINX_WEB_ROOT/$INPUT_DOMAIN/cert/$PRIVATE_NAME]"
-    echo "$INPUT_DOMAIN fullchain-key at [$NGINX_WEB_ROOT/$INPUT_DOMAIN/cert/$FULLCHAIN_NAME]"
-else
-    echo "$INPUT_DOMAIN auto ssl service installation failed"
-fi
-rm -rf $SCRIPT_NAME
+        return 0
+    else
+        echo "nginx not runing"
+        return 1
+    fi
+}
+
+
+handle_input(){
+    inputs=$1
+    pre_config
+    if [[ -z "${inputs// }" ]]; then
+        if onkey_install; then
+            echo "$INPUT_DOMAIN auto ssl service installed"
+            echo "$INPUT_DOMAIN private-key at [$NGINX_WEB_ROOT/$INPUT_DOMAIN/cert/$PRIVATE_NAME]"
+            echo "$INPUT_DOMAIN fullchain-key at [$NGINX_WEB_ROOT/$INPUT_DOMAIN/cert/$FULLCHAIN_NAME]"
+            return 0
+        else
+            echo "$INPUT_DOMAIN auto ssl service installation failed"
+            return 1
+        fi
+    else
+        parmas02=$2
+        parmas03=$3
+        parmas04=$4
+        parmas05=$5
+        parmas06=$6
+         if [[ -z "${inputs// }" ]] || [[ -z "${parmas02// }" ]] || [[ -z "${parmas03// }" ]] || [[ -z "${parmas04// }" ]] || [[ -z "${parmas05// }" ]] || [[ -z "${parmas06// }" ]]; then
+            echo "parmas error Simple With [./auto_ssl.sh -webroot /testberoot -domain www.test.com -email testtest@gmail.com]"
+            return 1
+         fi
+
+        if [[ $1 == "-webroot" ]]; then
+            NGINX_WEB_ROOT=$2
+        else
+            echo "parmas error [-webroot]"
+            return 1
+        fi
+
+        if [[ $3 == "-domain" ]]; then
+            INPUT_DOMAIN=$4
+        else
+            echo "parmas error [-domain]"
+            return 1
+        fi
+
+        if [[ $5 == "-email" ]]; then
+            INPUT_EMAIL=$6
+        else
+            echo "parmas error [-email]"
+            return 1
+        fi
+
+
+        if steps_install; then
+            echo "$INPUT_DOMAIN auto ssl service installed"
+            echo "$INPUT_DOMAIN private-key at [$NGINX_WEB_ROOT/$INPUT_DOMAIN/cert/$PRIVATE_NAME]"
+            echo "$INPUT_DOMAIN fullchain-key at [$NGINX_WEB_ROOT/$INPUT_DOMAIN/cert/$FULLCHAIN_NAME]"
+            return 0
+        else
+            echo "$INPUT_DOMAIN auto ssl service installation failed"
+            return 1
+        fi
+    fi
+}
+
+handle_input "$@" && wait && rm -rf $SCRIPT_NAME
