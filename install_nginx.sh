@@ -12,6 +12,7 @@ install_nginx(){
     echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] https://nginx.org/packages/ubuntu $(lsb_release -cs) nginx" | sudo tee /etc/apt/sources.list.d/nginx.list
     sudo apt update
     sudo apt install -y nginx
+    sudo systemctl enable nginx
 }
 
-pre_config && wait && install_nginx && wait && rm -rf $SCRIPT_NAME && wait && echo "Nginx install Complated"
+pre_config && wait && install_nginx && wait && echo "Nginx install Complated" && wait && rm -rf $SCRIPT_NAME

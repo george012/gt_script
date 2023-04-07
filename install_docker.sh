@@ -29,4 +29,4 @@ install(){
     pre_config && wait && config_docker_install && wait && install_docker && wait && sudo systemctl enable --now docker
 }
 
-install && wait && rm -rf $SCRIPT_NAME && wait && echo "redis is installed"
+install && wait && echo "docker is installed" && wait && rm -rf $SCRIPT_NAME

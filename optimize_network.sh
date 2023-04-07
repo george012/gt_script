@@ -72,4 +72,4 @@ optimize_sysctl_conf() {
     sysctl -p >/dev/null
 }
 
-optimize_limits_conf && wait && optimize_sysctl_conf && wait && rm -rf $CUSTOM_FILNAME && wait && echo "Optimization complete"
+optimize_limits_conf && wait && optimize_sysctl_conf && wait && echo "Optimization NetWork Complete" && wait && rm -rf $CUSTOM_FILNAME
