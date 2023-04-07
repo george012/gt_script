@@ -95,5 +95,9 @@ wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_scrip
 
 # 8. `auto_ssl` usege
 ```
+# one key
 wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/auto_ssl.sh && chmod a+x ./auto_ssl.sh && ./auto_ssl.sh
+
+# scrpit transfrom pramars
+wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/auto_ssl.sh && chmod a+x ./auto_ssl.sh && ./auto_ssl.sh -webroot /testberoot -domain www.test.com -email testtest@gmail.com
 ```
