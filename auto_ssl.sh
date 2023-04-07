@@ -85,7 +85,7 @@ echo "Nginx virtual host configuration for $INPUT_DOMAIN has been created."
 }
 
 install_acme(){
-    curl https://get.acme.sh | sh -s $INPUT_EMAIL
+    curl https://get.acme.sh | sh -s email=$INPUT_EMAIL
 }
 
 request_cert(){
@@ -196,6 +196,10 @@ handle_input(){
             return 1
         fi
     else
+        echo -----------------
+        echo domain=$INPUT_DOMAIN
+        echo domain=$INPUT_EMAIL
+        echo -----------------
         parmas02=$2
         parmas03=$3
         parmas04=$4
