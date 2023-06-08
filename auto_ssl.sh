@@ -128,6 +128,7 @@ Description=Timer for acme.sh service for $INPUT_DOMAIN
 
 [Timer]
 OnCalendar=*-*-* $AUTO_REFRESH_TIME
+Unit=acme-$INPUT_DOMAIN.service
 Persistent=true
 
 [Install]
