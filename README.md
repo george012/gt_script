@@ -6,17 +6,20 @@
 - [4. use`install_docker`](#4-useinstall_docker)
 - [5. use`install_redis`](#5-useinstall_redis)
 - [6. use`github_repo_version_scan`（仅仅支持Github）](#6-usegithub_repo_version_scan仅仅支持github)
-  - [6.1. 自动监测两个同步库是否需要更新](#61-自动监测两个同步库是否需要更新)
-  - [6.2. 获取指定库的latest版本名称](#62-获取指定库的latest版本名称)
-    - [6.2.1. Simple:](#621-simple)
-  - [6.3. 获取指定库的latest版本upload\_url](#63-获取指定库的latest版本upload_url)
-    - [6.3.1. Simple:](#631-simple)
-  - [6.4. 检查latest版本assets中是否存在指定文件](#64-检查latest版本assets中是否存在指定文件)
-    - [6.4.1. Simple--Linux:](#641-simple--linux)
-    - [6.4.2. Simple--Windows](#642-simple--windows)
+    - [6.1. 自动监测两个同步库是否需要更新](#61-自动监测两个同步库是否需要更新)
+    - [6.2. 获取指定库的latest版本名称](#62-获取指定库的latest版本名称)
+        - [6.2.1. Simple:](#621-simple)
+    - [6.3. 获取指定库的latest版本upload_url](#63-获取指定库的latest版本upload_url)
+        - [6.3.1. Simple:](#631-simple)
+    - [6.4. 检查latest版本assets中是否存在指定文件](#64-检查latest版本assets中是否存在指定文件)
+        - [6.4.1. Simple--Linux:](#641-simple--linux)
+        - [6.4.2. Simple--Windows](#642-simple--windows)
 - [7. `Nginx` install to `Ubuntu`](#7-nginx-install-to-ubuntu)
-- [7. `Ubuntu-20.0.4 LTS` Setup](#7-ubuntu-2004-lts-setup)
-- [8. `auto_ssl` usege](#8-auto_ssl-usege)
+- [8. `Ubuntu-20.0.4 LTS` Setup](#8-ubuntu-2004-lts-setup)
+- [9. `auto_ssl` usege](#9-auto_ssl-usege)
+- [10. `private_repo_tools` Private Repo Tools](#10-private_repo_tools-private-repo-tools)
+    - [10.1. Get Latest Version Name](#101-get-latest-version-name)
+    - [10.2. Download Appoint Release Assets](#102-download-appoint-release-assets)
 
 <!-- /TOC -->
 
@@ -88,16 +91,28 @@ echo "file_exist=$file_exist" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf
 wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/install_nginx.sh && chmod a+x ./install_nginx.sh && ./install_nginx.sh
 ```
 
-# 7. `Ubuntu-20.0.4 LTS` Setup
+# 8. `Ubuntu-20.0.4 LTS` Setup
 ```
 wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/setup_ubuntu20.sh && chmod a+x ./setup_ubuntu20.sh && ./setup_ubuntu20.sh
 ```
 
-# 8. `auto_ssl` usege
+# 9. `auto_ssl` usege
 ```
 # one key
 wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/auto_ssl.sh && chmod a+x ./auto_ssl.sh && ./auto_ssl.sh
 
 # scrpit transfrom pramars
 wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/auto_ssl.sh && chmod a+x ./auto_ssl.sh && ./auto_ssl.sh -webroot /testberoot -domain www.test.com -email testtest@gmail.com
+```
+
+# 10. `private_repo_tools` Private Repo Tools
+
+## 10.1. Get Latest Version Name
+```
+wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/private_repo_tools.sh && chmod a+x ./private_repo_tools.sh && ./private_repo_tools.sh -get_latest_releases_name ${GITHUB_PAT} owner/repo
+```
+
+## 10.2. Download Appoint Release Assets
+```
+wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/private_repo_tools.sh && chmod a+x ./private_repo_tools.sh && ./private_repo_tools.sh -download_private_repo_asstes ${GITHUB_PAT} ${owner}/${repo} ${relase_name} ${assets_file_name}|all ${save_dir}
 ```
