@@ -115,7 +115,7 @@ wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_scrip
 
 ## 10.2. Get Release UPLoadURL WIth ReleaseName
 ```
-wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/private_repo_tools.sh && chmod a+x ./private_repo_tools.sh && ./private_repo_tools.sh -get_latest_releases_name ${GITHUB_PAT} owner/repo ${relase_name}
+wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/private_repo_tools.sh && chmod a+x ./private_repo_tools.sh && ./private_repo_tools.sh -get_releases_upload_url ${GITHUB_PAT} owner/repo ${relase_name}
 ```
 
 

@@ -15,7 +15,7 @@ function get_latest_releases_name() {
 }
 
 function get_releases_upload_url() {
-    upload_url=$(echo $(curl --silent -u $REPO_USER:$PAT https://api.github.com/repos/$REPO_SUFFIX/releases/latest) | jq -r '.upload_url')
+    upload_url=$(echo $(curl --silent -u $REPO_USER:$PAT https://api.github.com/repos/$REPO_SUFFIX/releases/tags/$APPOINT_RELEASE_NAME) | jq -r '.upload_url')
     echo $upload_url | tr -d '\r' | tr -d '\n'
 }
 
