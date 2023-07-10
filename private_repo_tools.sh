@@ -19,8 +19,6 @@ function download_private_repo_asstes() {
     
     mkdir -p $SAVE_DIR
 
-    echo $resInfo
-
     echo "$resInfo" | jq -c '.assets[]' | while read asset; do
         asset_name=$(echo "$asset" | jq -r '.name')
         asset_id=$(echo "$asset" | jq -r '.id')
