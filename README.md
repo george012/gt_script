@@ -19,7 +19,8 @@
 - [9. `auto_ssl` usege](#9-auto_ssl-usege)
 - [10. `private_repo_tools` Private Repo Tools](#10-private_repo_tools-private-repo-tools)
     - [10.1. Get Latest Version Name](#101-get-latest-version-name)
-    - [10.2. Download Appoint Release Assets](#102-download-appoint-release-assets)
+    - [10.2. Get Release UPLoadURL WIth ReleaseName](#102-get-release-uploadurl-with-releasename)
+    - [10.3. Download Appoint Release Assets](#103-download-appoint-release-assets)
 
 <!-- /TOC -->
 
@@ -112,7 +113,13 @@ wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_scrip
 wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/private_repo_tools.sh && chmod a+x ./private_repo_tools.sh && ./private_repo_tools.sh -get_latest_releases_name ${GITHUB_PAT} owner/repo
 ```
 
-## 10.2. Download Appoint Release Assets
+## 10.2. Get Release UPLoadURL WIth ReleaseName
+```
+wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/private_repo_tools.sh && chmod a+x ./private_repo_tools.sh && ./private_repo_tools.sh -get_latest_releases_name ${GITHUB_PAT} owner/repo ${relase_name}
+```
+
+
+## 10.3. Download Appoint Release Assets
 ```
 wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/private_repo_tools.sh && chmod a+x ./private_repo_tools.sh && ./private_repo_tools.sh -download_private_repo_asstes ${GITHUB_PAT} ${owner}/${repo} ${relase_name} ${assets_file_name}|all ${save_dir}
 ```

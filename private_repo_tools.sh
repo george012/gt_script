@@ -13,6 +13,12 @@ function get_latest_releases_name() {
     remote_version=$(echo $(curl --silent -u $REPO_USER:$PAT https://api.github.com/repos/$REPO_SUFFIX/releases/latest) | jq -r '.name')
     echo $remote_version | tr -d '\r' | tr -d '\n'
 }
+
+function get_releases_upload_url() {
+    upload_url=$(echo $(curl --silent -u $REPO_USER:$PAT https://api.github.com/repos/$REPO_SUFFIX/releases/latest) | jq -r '.upload_url')
+    echo $upload_url | tr -d '\r' | tr -d '\n'
+}
+
 function download_private_repo_asstes() {
 
     resInfo=$(curl --silent -u $REPO_USER:$PAT https://api.github.com/repos/$REPO_SUFFIX/releases/tags/$APPOINT_RELEASE_NAME)
@@ -60,11 +66,11 @@ handle_input(){
 
     if [[ $1 == "-download_private_repo_asstes" ]]; then
         if [[ -z "$4" ]]; then
-            echo "must Appoint Release Name"
+            echo "must Target Release Name"
             return 1
         fi
         if [[ -z "$5" ]]; then
-            echo "must input Appoint Assets File Name"
+            echo "must input Target Assets File Name"
             return 1
         fi
         if [[ -z "$6" ]]; then
@@ -78,6 +84,13 @@ handle_input(){
         download_private_repo_asstes
     elif [[ $1 == "-get_latest_releases_name" ]]; then
         echo $(get_latest_releases_name)
+    elif [[ $1 == "-get_releases_upload_url" ]]; then
+        if [[ -z "$4" ]]; then
+            echo "must Target Release Name"
+            return 1
+        fi
+        APPOINT_RELEASE_NAME=$4
+        echo $(get_releases_upload_url)
     fi
 }
 
