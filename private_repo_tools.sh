@@ -9,6 +9,24 @@ SAVE_DIR=""
 APPOINT_RELEASE_NAME=""
 APPOINT_ASSETS_FILE_NAME=""
 
+
+get_repo_lversion_with_repo_suffix(){
+    repo_version=$(echo $(curl --silent -u $REPO_USER:$PAT https://api.github.com/repos/$1/releases/latest) | jq -r '.name')
+    echo $repo_version | tr -d '\r' | tr -d '\n'
+}
+
+function check_repo_need_update() {
+    target_repo_version=$(get_repo_lversion_with_repo_suffix "$REPO_SUFFIX")
+    remote_repo_version=$(get_repo_lversion_with_repo_suffix "$1")
+
+    if [ "$(printf '%s\n' "$target_repo_version" "$remote_repo_version" | sort -Vr | head -n1)" = "$target_repo_version" ]; then
+        echo "no"
+    else
+        echo "yes"
+    fi
+}
+
+
 function get_latest_releases_name() {
     remote_version=$(echo $(curl --silent -u $REPO_USER:$PAT https://api.github.com/repos/$REPO_SUFFIX/releases/latest) | jq -r '.name')
     echo $remote_version | tr -d '\r' | tr -d '\n'
@@ -91,6 +109,12 @@ handle_input(){
         fi
         APPOINT_RELEASE_NAME=$4
         echo $(get_releases_upload_url)
+    elif [[ $1 == "-check_repo_need_update" ]]; then
+        if [[ -z "$4" ]]; then
+            echo "must Remote REPO_SUFFIX"
+            return 1
+        fi
+        echo $(check_repo_need_update "$4")
     fi
 }
 
