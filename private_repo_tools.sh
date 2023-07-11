@@ -10,14 +10,14 @@ APPOINT_RELEASE_NAME=""
 APPOINT_ASSETS_FILE_NAME=""
 
 
-get_repo_lversion_with_repo_suffix(){
+get_repo_version_with_repo_suffix(){
     repo_version=$(echo $(curl --silent -u $REPO_USER:$PAT https://api.github.com/repos/$1/releases/latest) | jq -r '.name')
     echo $repo_version | tr -d '\r' | tr -d '\n'
 }
 
 function check_repo_need_update() {
-    target_repo_version=$(get_repo_lversion_with_repo_suffix "$REPO_SUFFIX")
-    remote_repo_version=$(get_repo_lversion_with_repo_suffix "$1")
+    target_repo_version=$(get_repo_version_with_repo_suffix "$REPO_SUFFIX")
+    remote_repo_version=$(get_repo_version_with_repo_suffix "$1")
 
     if [ "$(printf '%s\n' "$target_repo_version" "$remote_repo_version" | sort -Vr | head -n1)" = "$target_repo_version" ]; then
         echo "no"
