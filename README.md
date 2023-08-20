@@ -121,7 +121,7 @@ wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_scrip
 
 ## checke version
 ```
-wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/private_repo_tools.sh && chmod a+x ./private_repo_tools.sh && ./private_repo_tools.sh -download_private_repo_asstes ${GITHUB_PAT} ${owner}/${repo} ${relase_name} ${assets_file_name}|all ${save_dir}
+wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/private_repo_tools.sh && chmod a+x ./private_repo_tools.sh && ./private_repo_tools.sh -check_repo_need_update ${GITHUB_PAT} ${owner}/${repo} ${remote_owner}/${remote_repo}
 ```
 
 ## 10.3. Download Appoint Release Assets
