@@ -139,6 +139,8 @@ EOF
 enable_service(){
     sudo systemctl daemon-reload
     sudo systemctl enable --now acme-$INPUT_DOMAIN.timer
+    sudo systemctl enable --now acme-$INPUT_DOMAIN.service
+    sudo systemctl start --now acme-$INPUT_DOMAIN.service
 }
 
 onkey_install(){
