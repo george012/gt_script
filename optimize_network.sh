@@ -9,6 +9,8 @@ optimize_limits_conf() {
     local limits_conf=(
         "* soft nofile 1024000"
         "* hard nofile 1024000"
+        "root soft nofile 1024000"
+        "root hard nofile 1024000"
     )
 
     if [ ! -f "$limits_conf_file" ]; then
