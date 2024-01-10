@@ -7,10 +7,8 @@ echo "file name with "$CUSTOM_FILNAME
 optimize_limits_conf() {
     local limits_conf_file="/etc/security/limits.conf"
     local limits_conf=(
-        "root soft nproc 51200"
-        "root hard nproc 51200"
-        "root soft nofile 1024000"
-        "root hard nofile 1024000"
+        "* soft nofile 1024000"
+        "* hard nofile 1024000"
     )
 
     if [ ! -f "$limits_conf_file" ]; then
@@ -36,9 +34,11 @@ optimize_limits_conf() {
 optimize_sysctl_conf() {
     local sysctl_conf_file="/etc/sysctl.conf"
     local sysctl_conf=(
-        "net.core.somaxconn = 65535"
-        "net.ipv4.tcp_max_syn_backlog = 65535"
-        "net.ipv4.ip_local_port_range = 1024 65535"
+        "net.core.somaxconn = 65000"
+        "net.core.netdev_max_backlog = 32768"
+        "net.core.default_qdisc=cake"
+        "net.ipv4.tcp_max_syn_backlog = 32768"
+        "net.ipv4.ip_local_port_range = 1024 65000"
         "net.ipv4.tcp_sack = 1"
         "net.ipv4.tcp_timestamps = 1"
         "net.ipv4.tcp_keepalive_time = 600"
@@ -47,6 +47,16 @@ optimize_sysctl_conf() {
         "net.ipv4.tcp_fin_timeout = 30"
         "net.ipv6.conf.all.disable_ipv6 = 1"
         "net.ipv6.conf.default.disable_ipv6 = 1"
+        "net.ipv4.tcp_tw_reuse = 1"
+        "net.ipv4.tcp_max_orphans = 32768"
+        "net.ipv4.route.gc_timeout = 100"
+        "net.ipv4.tcp_syn_retries = 1"
+        "net.ipv4.tcp_synack_retries = 1"
+        "net.ipv4.tcp_syncookies = 1"
+        "net.ipv4.tcp_congestion_control=bbr"
+        "net.ipv4.tcp_ecn=2"
+        "fs.file-max = 1024000"
+        "fs.inotify.max_user_instances = 8192"
     )
 
     if [ ! -f "$sysctl_conf_file" ]; then
