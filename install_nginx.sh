@@ -13,6 +13,7 @@ install_nginx(){
     sudo apt update
     sudo apt install -y nginx
     sudo systemctl enable nginx
+    sudo systemctl start nginx
 }
 
 pre_config && wait && install_nginx && wait && echo "Nginx install Complated" && wait && rm -rf $SCRIPT_NAME
