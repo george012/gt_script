@@ -320,7 +320,7 @@ handle_input(){
             return 1
          fi
 
-        if [[ $1 == "-webroot" ]]; then
+        if [[ $1 == "-nginx_web_root" ]]; then
             NGINX_WEB_ROOT=$2
         else
             echo "parmas error [-webroot]"
