@@ -196,7 +196,7 @@ request_cert(){
     mkdir -p $NGINX_WEB_ROOT/${INPUT_DOMAIN}/cert
     mkdir -p $NGINX_WEB_ROOT/${INPUT_DOMAIN}/web_root
     mkdir -p $NGINX_WEB_ROOT/${INPUT_DOMAIN}/logs
-    $ACME_HOME/acme.sh --issue -d ${INPUT_DOMAIN} --webroot $NGINX_WEB_ROOT/${INPUT_DOMAIN}/web_root/
+    acme.sh --issue -d ${INPUT_DOMAIN} --nginx
 }
 
 install_cert(){
