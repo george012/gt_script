@@ -14,7 +14,7 @@ PRIVATE_NAME=private.key
 
 
 # logrotate config
-create_logrotate_config(){
+function create_logrotate_config(){
 sudo rm -rf /etc/logrotate.d/${INPUT_DOMAIN}
 
 cat << EOF | sudo tee /etc/logrotate.d/${INPUT_DOMAIN}
@@ -31,7 +31,7 @@ EOF
 }
 
 # logrotate systemd
-create_logrotate_service(){
+function create_logrotate_service(){
 sudo rm -rf /etc/systemd/system/${INPUT_DOMAIN}_logrotate.service
 
 cat << EOF | sudo tee /etc/systemd/system/${INPUT_DOMAIN}_logrotate.service
@@ -45,7 +45,7 @@ EOF
 }
 
 # logrotate systemd timer
-create_logrotate_service_timer(){
+function create_logrotate_service_timer(){
 sudo rm -rf /etc/systemd/system/${INPUT_DOMAIN}_logrotate.timer
 
 cat << EOF | sudo tee /etc/systemd/system/${INPUT_DOMAIN}_logrotate.timer
@@ -73,11 +73,11 @@ function handle_logrotate() {
 } 
 
 
-pre_config(){
+function pre_config(){
     sudo apt update && wait && sudo apt install -y unzip zip wget curl gnupg lsb-release
 }
 
-nginx_is_runing(){
+function nginx_is_runing(){
     if pgrep nginx >/dev/null 2>&1; then
         return 0
     else
@@ -85,7 +85,7 @@ nginx_is_runing(){
     fi
 }
 
-is_valid_domain() {
+function is_valid_domain() {
     local domain="$1"
     if [[ $domain =~ ^([a-zA-Z0-9](-?[a-zA-Z0-9])*\.)+[a-zA-Z]{2,}$ ]]; then
         return 0
@@ -94,7 +94,7 @@ is_valid_domain() {
     fi
 }
 
-is_valid_email() {
+function is_valid_email() {
     local email="$1"
     if [[ $email =~ ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$ ]]; then
         return 0
@@ -103,7 +103,7 @@ is_valid_email() {
     fi
 }
 
-input_domain(){
+function input_domain(){
     while true; do
         echo "====Please Input Domain===="
         read -p "Please Input(请输入): " input_string
@@ -117,7 +117,7 @@ input_domain(){
     done
 }
 
-input_email(){
+function input_email(){
     while true; do
         echo "====Please Input Email===="
         read -p "Please Input(请输入): " input_string
@@ -130,7 +130,7 @@ input_email(){
     done
 }
 
-create_nginx_vhost(){
+function create_nginx_vhost(){
 cat << EOF | sudo tee /etc/nginx/conf.d/$INPUT_DOMAIN.conf
 server {
     listen       80;
@@ -192,21 +192,30 @@ install_acme(){
     curl https://get.acme.sh | sh -s email=$INPUT_EMAIL
 }
 
-request_cert(){
+function request_cert(){
     mkdir -p $NGINX_WEB_ROOT/${INPUT_DOMAIN}/cert
     mkdir -p $NGINX_WEB_ROOT/${INPUT_DOMAIN}/web_root
     mkdir -p $NGINX_WEB_ROOT/${INPUT_DOMAIN}/logs
-    $ACME_HOME/acme.sh --issue -d ${INPUT_DOMAIN} --nginx --debug
+
+    if [[ ${INPUT_DOMAIN} == www.* ]]; then
+        # 移除www.，获得基础域名
+        BASE_DOMAIN=${INPUT_DOMAIN#www.}
+        # 为www和非www版本的域名发出证书
+        $ACME_HOME/acme.sh --issue -d ${INPUT_DOMAIN} -d ${BASE_DOMAIN} --nginx --debug
+    else
+        # 只为输入的域名发出证书
+        $ACME_HOME/acme.sh --issue -d ${INPUT_DOMAIN} --nginx --debug
+    fi
 }
 
-install_cert(){
+function install_cert(){
 $ACME_HOME/acme.sh --install-cert -d ${INPUT_DOMAIN} \
 --key-file       $NGINX_WEB_ROOT/${INPUT_DOMAIN}/cert/$PRIVATE_NAME  \
 --fullchain-file $NGINX_WEB_ROOT/${INPUT_DOMAIN}/cert/$FULLCHAIN_NAME \
 --reloadcmd     "service nginx force-reload"
 }
 
-create_acme_service(){
+function create_acme_service(){
 rm -rf /etc/systemd/system/${INPUT_DOMAIN}_acme.service
 cat << EOF | sudo tee /etc/systemd/system/${INPUT_DOMAIN}_acme.service
 [Unit]
@@ -222,7 +231,7 @@ WantedBy=multi-user.target
 EOF
 }
 
-create_acme_service_timer(){
+function create_acme_service_timer(){
 rm -rf /etc/systemd/system/${INPUT_DOMAIN}_acme.timer
 cat << EOF | sudo tee /etc/systemd/system/${INPUT_DOMAIN}_acme.timer
 [Unit]
@@ -238,14 +247,14 @@ WantedBy=timers.target
 EOF
 }
 
-enable_service(){
+function enable_service(){
     sudo systemctl daemon-reload
     sudo systemctl enable --now ${INPUT_DOMAIN}_acme.timer
     sudo systemctl enable --now ${INPUT_DOMAIN}_acme.service
     sudo systemctl start --now ${INPUT_DOMAIN}_acme.service
 }
 
-onkey_install(){
+function onkey_install(){
     if nginx_is_runing; then
         input_domain \
         && input_email \
@@ -269,7 +278,7 @@ onkey_install(){
     fi
 }
 
-steps_install(){
+function steps_install(){
     if nginx_is_runing; then
         create_nginx_vhost \
         && wait \
@@ -292,7 +301,7 @@ steps_install(){
 }
 
 
-handle_input(){
+function handle_input(){
     inputs=$1
     pre_config
     if [[ -z "${inputs// }" ]]; then
