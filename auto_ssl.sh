@@ -136,7 +136,7 @@ function create_nginx_vhost(){
 cat << EOF | sudo tee /etc/nginx/conf.d/$INPUT_DOMAIN.conf
 server {
     listen       80;
-    server_name ${INPUT_DOMAIN},${BASE_DOMAIN};
+    server_name ${INPUT_DOMAIN} ${BASE_DOMAIN};
 
     root $NGINX_WEB_ROOT/${INPUT_DOMAIN}/web_root;
 
@@ -153,7 +153,7 @@ server {
 
 # server {
 #     listen 80;
-#     server_name ${INPUT_DOMAIN},${BASE_DOMAIN};
+#     server_name ${INPUT_DOMAIN} ${BASE_DOMAIN};
     
 #     # 重定向所有 HTTP 请求到 HTTPS
 #     return 301 https://'$server_name$request_uri';
@@ -161,7 +161,7 @@ server {
 
 # server {
 #     listen 443 ssl;
-#     server_name ${INPUT_DOMAIN},${BASE_DOMAIN};
+#     server_name ${INPUT_DOMAIN} ${BASE_DOMAIN};
 
 #     # SSL 证书和私钥的位置
 #     ssl_certificate /nginx_web/${INPUT_DOMAIN}/cert/fullchain.cer;
