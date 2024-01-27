@@ -243,6 +243,7 @@ EOF
 
 
 systemctl reload nginx
+systemctl restart nginx
 echo "Nginx virtual host configuration for ${INPUT_DOMAIN} has been created."
 }
 
