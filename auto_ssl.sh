@@ -243,6 +243,7 @@ EOF
 
 
 systemctl reload nginx
+touch $NGINX_WEB_ROOT/${INPUT_DOMAIN}/web_root/index.html
 systemctl restart nginx
 echo "Nginx virtual host configuration for ${INPUT_DOMAIN} has been created."
 }
