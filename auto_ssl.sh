@@ -240,10 +240,14 @@ server {
 EOF
     fi
 
+    mkdir -p $NGINX_WEB_ROOT/${INPUT_DOMAIN}/cert
+    mkdir -p $NGINX_WEB_ROOT/${INPUT_DOMAIN}/web_root
+    mkdir -p $NGINX_WEB_ROOT/${INPUT_DOMAIN}/logs
 
+cat << EOF | sudo tee $NGINX_WEB_ROOT/${INPUT_DOMAIN}/web_root/index.html
+EOF
 
 systemctl reload nginx
-touch $NGINX_WEB_ROOT/${INPUT_DOMAIN}/web_root/index.html
 systemctl restart nginx
 echo "Nginx virtual host configuration for ${INPUT_DOMAIN} has been created."
 }
@@ -253,10 +257,6 @@ install_acme(){
 }
 
 function request_cert(){
-    mkdir -p $NGINX_WEB_ROOT/${INPUT_DOMAIN}/cert
-    mkdir -p $NGINX_WEB_ROOT/${INPUT_DOMAIN}/web_root
-    mkdir -p $NGINX_WEB_ROOT/${INPUT_DOMAIN}/logs
-
     if [[ ${INPUT_DOMAIN} == www.* ]]; then
         # 移除www.，获得基础域名
         BASE_DOMAIN=${INPUT_DOMAIN#www.}
