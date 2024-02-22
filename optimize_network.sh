@@ -4,13 +4,15 @@ set -e
 CUSTOM_FILNAME=$(basename "$0")
 echo "file name with "$CUSTOM_FILNAME
 
+LIMITNOFILE=2048000
+
 optimize_limits_conf() {
     local limits_conf_file="/etc/security/limits.conf"
     local limits_conf=(
-        "* soft nofile 1024000"
-        "* hard nofile 1024000"
-        "root soft nofile 1024000"
-        "root hard nofile 1024000"
+        "* soft nofile ${LIMITNOFILE}"
+        "* hard nofile ${LIMITNOFILE}"
+        "root soft nofile ${LIMITNOFILE}"
+        "root hard nofile ${LIMITNOFILE}"
     )
 
     if [ ! -f "$limits_conf_file" ]; then
@@ -57,7 +59,7 @@ optimize_sysctl_conf() {
         "net.ipv4.tcp_syncookies = 1"
         "net.ipv4.tcp_congestion_control=bbr"
         "net.ipv4.tcp_ecn=2"
-        "fs.file-max = 1024000"
+        "fs.file-max = ${LIMITNOFILE}"
         "fs.inotify.max_user_instances = 8192"
     )
 
