@@ -39,7 +39,7 @@ optimize_sysctl_conf() {
     local sysctl_conf_file="/etc/sysctl.conf"
     local sysctl_conf=(
         "net.core.somaxconn = 65000"
-        "net.core.netdev_max_backlog = 32768"
+        "net.core.netdev_max_backlog = 51200"
         "net.core.default_qdisc=cake"
         "net.ipv4.tcp_max_syn_backlog = 32768"
         "net.ipv4.ip_local_port_range = 1024 65000"
