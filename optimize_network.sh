@@ -25,9 +25,12 @@ optimize_limits_conf() {
     fi
 
     for conf_item in "${limits_conf[@]}"; do
-        if grep -q -E "^${conf_item}\$" "$limits_conf_file"; then
+        # 使用sed对特殊字符进行转义，尤其是`*` 
+        local escaped_conf_item=$(echo "$conf_item" | sed -e 's/\*/\\*/g' -e 's/\./\\./g')
+        
+        if grep -q -E "^${escaped_conf_item}\$" "$limits_conf_file"; then
             # 如果存在相同的配置项，则删除整行
-            sed -i -E "/^${conf_item}\$/d" "$limits_conf_file"
+            sed -i -E "/^${escaped_conf_item}\$/d" "$limits_conf_file"
         fi
 
         # 添加新的配置项
