@@ -22,7 +22,7 @@
     - [10.2. Get Release UPLoadURL WIth ReleaseName](#102-get-release-uploadurl-with-releasename)
     - [10.3. checke version](#103-checke-version)
     - [10.4. Checke ssl/tls cert express date](#104-checke-ssltls-cert-express-date)
-    - [10.5. Download Appoint Release Assets](#105-download-appoint-release-assets)
+    - [10.5. Check Cert](#105-check-cert)
 
 <!-- /TOC -->
 
@@ -130,7 +130,7 @@ wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_scrip
 wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/private_repo_tools.sh && chmod a+x ./private_repo_tools.sh && ./private_repo_tools.sh -download_private_repo_asstes ${GITHUB_PAT} ${owner}/${repo} ${relase_name} ${assets_file_name}|all ${save_dir}
 ```
 
-## 10.5. Download Appoint Release Assets
+## 10.5. Check Cert
 ```
-wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/check_cert.sh && chmod a+x ./check_cert.sh && ./check_cert.sh ${/path/to/your/certificate.crt}
+wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/check_cert.sh && chmod a+x ./check_cert.sh && ./check_cert.sh ${/path/to/your/certificate.crt} && rm -rf ./check_cert.sh
 ```
