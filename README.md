@@ -20,8 +20,9 @@
 - [10. `private_repo_tools` Private Repo Tools](#10-private_repo_tools-private-repo-tools)
     - [10.1. Get Latest Version Name](#101-get-latest-version-name)
     - [10.2. Get Release UPLoadURL WIth ReleaseName](#102-get-release-uploadurl-with-releasename)
-    - [checke version](#checke-version)
-    - [10.3. Download Appoint Release Assets](#103-download-appoint-release-assets)
+    - [10.3. checke version](#103-checke-version)
+    - [10.4. Checke ssl/tls cert express date](#104-checke-ssltls-cert-express-date)
+    - [10.5. Download Appoint Release Assets](#105-download-appoint-release-assets)
 
 <!-- /TOC -->
 
@@ -119,12 +120,17 @@ wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_scrip
 wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/private_repo_tools.sh && chmod a+x ./private_repo_tools.sh && ./private_repo_tools.sh -get_releases_upload_url ${GITHUB_PAT} owner/repo ${relase_name}
 ```
 
-## checke version
+## 10.3. checke version
 ```
 wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/private_repo_tools.sh && chmod a+x ./private_repo_tools.sh && ./private_repo_tools.sh -check_repo_need_update ${GITHUB_PAT} ${owner}/${repo} ${remote_owner}/${remote_repo}
 ```
 
-## 10.3. Download Appoint Release Assets
+## 10.4. Checke ssl/tls cert express date
 ```
 wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/private_repo_tools.sh && chmod a+x ./private_repo_tools.sh && ./private_repo_tools.sh -download_private_repo_asstes ${GITHUB_PAT} ${owner}/${repo} ${relase_name} ${assets_file_name}|all ${save_dir}
+```
+
+## 10.5. Download Appoint Release Assets
+```
+wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/check_cert.sh && chmod a+x ./check_cert.sh && ./check_cert.sh ${/path/to/your/certificate.crt}
 ```
