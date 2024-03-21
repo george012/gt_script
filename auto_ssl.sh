@@ -246,7 +246,7 @@ EOF
 
 cat << EOF | sudo tee $NGINX_WEB_ROOT/${INPUT_DOMAIN}/web_root/index.html
 EOF
-
+ln -s $NGINX_WEB_ROOT/${INPUT_DOMAIN}/web_root/index.html $NGINX_WEB_ROOT/${INPUT_DOMAIN}/web_root/404.html
 systemctl reload nginx
 systemctl restart nginx
 echo "Nginx virtual host configuration for ${INPUT_DOMAIN} has been created."
@@ -254,6 +254,33 @@ echo "Nginx virtual host configuration for ${INPUT_DOMAIN} has been created."
 
 install_acme(){
     curl https://get.acme.sh | sh -s email=$INPUT_EMAIL
+}
+
+function handleDefault {
+    mkdir -p $NGINX_WEB_ROOT/default
+    mkdir -p $NGINX_WEB_ROOT/default/logs
+cat << EOF | sudo tee $NGINX_WEB_ROOT/default/index.html
+EOF
+    ln -s $NGINX_WEB_ROOT/default/index.html $NGINX_WEB_ROOT/default/404.html
+
+
+cat << EOF | sudo tee /etc/nginx/conf.d/default.conf
+    server {
+    listen       80;
+
+    root /nginx_web/default;
+
+    index index.php index.html index.htm;
+    error_page 400 401 403 404 405 406 407 408 409 410 411 412 413 414 415 416 417 500 501 502 503 504 =200 /404.html;
+
+    location ~ /(\.git(/|$)|backup(/|$)|\.DS_Store|\.gitignore) {
+        deny all;
+    }
+
+    access_log /nginx_web/default/logs/access.log;
+    error_log /nginx_web/default/logs/error.log;
+}
+EOF
 }
 
 function request_cert(){
@@ -319,6 +346,7 @@ function onkey_install(){
         input_domain \
         && input_email \
         && create_nginx_vhost \
+        && handleDefault \
         && wait \
         && install_acme \
         && wait \
@@ -341,6 +369,7 @@ function onkey_install(){
 function steps_install(){
     if nginx_is_runing; then
         create_nginx_vhost \
+        && handleDefault \
         && wait \
         && install_acme \
         && wait \
