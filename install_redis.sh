@@ -14,7 +14,8 @@ install_redis(){
     && wait \
     && sudo apt update \
     && wait \
-    && sudo apt-get -y install redis
+    && sudo apt -y install redis \
+    && sudo systemctl enable redis-server.service
 }
 
 pre_config && wait && install_redis && wait && rm -rf $SCRIPT_NAME && wait && echo "redis is installed"
