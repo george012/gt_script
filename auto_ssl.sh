@@ -133,112 +133,67 @@ function create_nginx_vhost(){
     if [[ ${INPUT_DOMAIN} == www.* ]]; then
         # 移除www.，获得基础域名
         BASE_DOMAIN=${INPUT_DOMAIN#www.}
-cat << EOF | sudo tee /etc/nginx/conf.d/$INPUT_DOMAIN.conf
-server {
-    listen       80;
-    server_name ${INPUT_DOMAIN} ${BASE_DOMAIN};
-
-    root $NGINX_WEB_ROOT/${INPUT_DOMAIN}/web_root;
-
-    index index.php index.html index.htm;
-    error_page 400 401 403 404 405 406 407 408 409 410 411 412 413 414 415 416 417 500 501 502 503 504 =200 /404.html;
-
-    location ~ /(\.git(/|$)|backup(/|$)|\.DS_Store|\.gitignore) {
-        deny all;
-    }
-
-    access_log ${NGINX_WEB_ROOT}/${INPUT_DOMAIN}/logs/access.log;
-    error_log ${NGINX_WEB_ROOT}/${INPUT_DOMAIN}/logs/error.log;
-}
-
-# server {
-#     listen 80;
-#     server_name ${INPUT_DOMAIN} ${BASE_DOMAIN};
-    
-#     # 重定向所有 HTTP 请求到 HTTPS
-#     return 301 https://'$server_name$request_uri';
-# }
-
-# server {
-#     listen 443 ssl;
-#     server_name ${INPUT_DOMAIN} ${BASE_DOMAIN};
-
-#     # SSL 证书和私钥的位置
-#     ssl_certificate /nginx_web/${INPUT_DOMAIN}/cert/fullchain.cer;
-#     ssl_certificate_key /nginx_web/${INPUT_DOMAIN}/cert/private.key;
-
-#     # 强化 HTTPS 设置
-#     ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
-#     ssl_prefer_server_ciphers on;
-#     ssl_ciphers 'AEAD-AES256-GCM-SHA384 ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256';
-
-
-#     root $NGINX_WEB_ROOT/${INPUT_DOMAIN}/web_root;
-#     index index.php index.html index.htm;
-#     error_page 400 401 403 404 405 406 407 408 409 410 411 412 413 414 415 416 417 500 501 502 503 504 =200 /404.html;
-    
-#     location ~ /(\.git(/|$)|backup(/|$)|\.DS_Store|\.gitignore) {
-#         deny all;
-#     }
-
-#     access_log ${NGINX_WEB_ROOT}/${INPUT_DOMAIN}/logs/access.log;
-#     error_log ${NGINX_WEB_ROOT}/${INPUT_DOMAIN}/logs/error.log;
-# }
-EOF
-    else
-cat << EOF | sudo tee /etc/nginx/conf.d/$INPUT_DOMAIN.conf
-server {
-    listen       80;
-    server_name ${INPUT_DOMAIN};
-
-    root $NGINX_WEB_ROOT/${INPUT_DOMAIN}/web_root;
-
-    index index.php index.html index.htm;
-    error_page 400 401 403 404 405 406 407 408 409 410 411 412 413 414 415 416 417 500 501 502 503 504 =200 /404.html;
-
-    location ~ /(\.git(/|$)|backup(/|$)|\.DS_Store|\.gitignore) {
-        deny all;
-    }
-
-    access_log ${NGINX_WEB_ROOT}/${INPUT_DOMAIN}/logs/access.log;
-    error_log ${NGINX_WEB_ROOT}/${INPUT_DOMAIN}/logs/error.log;
-}
-
-# server {
-#     listen 80;
-#     server_name ${INPUT_DOMAIN},${BASE_DOMAIN};
-    
-#     # 重定向所有 HTTP 请求到 HTTPS
-#     return 301 https://'$server_name$request_uri';
-# }
-
-# server {
-#     listen 443 ssl;
-#     server_name ${INPUT_DOMAIN},${BASE_DOMAIN};
-
-#     # SSL 证书和私钥的位置
-#     ssl_certificate /nginx_web/${INPUT_DOMAIN}/cert/fullchain.cer;
-#     ssl_certificate_key /nginx_web/${INPUT_DOMAIN}/cert/private.key;
-
-#     # 强化 HTTPS 设置
-#     ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
-#     ssl_prefer_server_ciphers on;
-#     ssl_ciphers 'AEAD-AES256-GCM-SHA384 ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256';
-
-
-#     root $NGINX_WEB_ROOT/${INPUT_DOMAIN}/web_root;
-#     index index.php index.html index.htm;
-#     error_page 400 401 403 404 405 406 407 408 409 410 411 412 413 414 415 416 417 500 501 502 503 504 =200 /404.html;
-    
-#     location ~ /(\.git(/|$)|backup(/|$)|\.DS_Store|\.gitignore) {
-#         deny all;
-#     }
-
-#     access_log ${NGINX_WEB_ROOT}/${INPUT_DOMAIN}/logs/access.log;
-#     error_log ${NGINX_WEB_ROOT}/${INPUT_DOMAIN}/logs/error.log;
-# }
-EOF
     fi
+
+    # 如果 BASE_DOMAIN 有有效值，则在 server_name 中包括它
+    local SERVER_NAME=${INPUT_DOMAIN}
+    if [[ ${BASE_DOMAIN} != "no" ]]; then
+        SERVER_NAME="${INPUT_DOMAIN} ${BASE_DOMAIN}"
+    fi
+
+cat << EOF | sudo tee /etc/nginx/conf.d/$INPUT_DOMAIN.conf
+server {
+    listen       80;
+    server_name ${SERVER_NAME};
+
+    root $NGINX_WEB_ROOT/${INPUT_DOMAIN}/web_root;
+
+    index index.php index.html index.htm;
+    error_page 400 401 403 404 405 406 407 408 409 410 411 412 413 414 415 416 417 500 501 502 503 504 =200 /404.html;
+
+    location ~ /(\.git(/|$)|backup(/|$)|\.DS_Store|\.gitignore) {
+        deny all;
+    }
+
+    access_log ${NGINX_WEB_ROOT}/${INPUT_DOMAIN}/logs/access.log;
+    error_log ${NGINX_WEB_ROOT}/${INPUT_DOMAIN}/logs/error.log;
+}
+
+# server {
+#     listen 80;
+#     server_name ${SERVER_NAME};
+    
+#     # 重定向所有 HTTP 请求到 HTTPS
+#     return 301 https://'$server_name$request_uri';
+# }
+
+# server {
+#     listen 443 ssl;
+#     server_name ${SERVER_NAME};
+
+#     # SSL 证书和私钥的位置
+#     ssl_certificate /nginx_web/${INPUT_DOMAIN}/cert/fullchain.cer;
+#     ssl_certificate_key /nginx_web/${INPUT_DOMAIN}/cert/private.key;
+
+#     # 强化 HTTPS 设置
+#     ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
+#     ssl_prefer_server_ciphers on;
+#     ssl_ciphers 'AEAD-AES256-GCM-SHA384 ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256';
+
+
+#     root $NGINX_WEB_ROOT/${INPUT_DOMAIN}/web_root;
+#     index index.php index.html index.htm;
+#     error_page 400 401 403 404 405 406 407 408 409 410 411 412 413 414 415 416 417 500 501 502 503 504 =200 /404.html;
+    
+#     location ~ /(\.git(/|$)|backup(/|$)|\.DS_Store|\.gitignore) {
+#         deny all;
+#     }
+
+#     access_log ${NGINX_WEB_ROOT}/${INPUT_DOMAIN}/logs/access.log;
+#     error_log ${NGINX_WEB_ROOT}/${INPUT_DOMAIN}/logs/error.log;
+# }
+EOF
+
 
     mkdir -p $NGINX_WEB_ROOT/${INPUT_DOMAIN}/cert
     mkdir -p $NGINX_WEB_ROOT/${INPUT_DOMAIN}/web_root
@@ -246,10 +201,11 @@ EOF
 
 cat << EOF | sudo tee $NGINX_WEB_ROOT/${INPUT_DOMAIN}/web_root/index.html
 EOF
-ln -s $NGINX_WEB_ROOT/${INPUT_DOMAIN}/web_root/index.html $NGINX_WEB_ROOT/${INPUT_DOMAIN}/web_root/404.html
-systemctl reload nginx
-systemctl restart nginx
-echo "Nginx virtual host configuration for ${INPUT_DOMAIN} has been created."
+
+    ln -s $NGINX_WEB_ROOT/${INPUT_DOMAIN}/web_root/index.html $NGINX_WEB_ROOT/${INPUT_DOMAIN}/web_root/404.html
+    systemctl reload nginx
+    systemctl restart nginx
+    echo "Nginx virtual host configuration for ${INPUT_DOMAIN} has been created."
 }
 
 install_acme(){
@@ -286,7 +242,7 @@ EOF
 function request_cert(){
     if [[ ${INPUT_DOMAIN} == www.* ]]; then
         # 移除www.，获得基础域名
-        BASE_DOMAIN=${INPUT_DOMAIN#www.}
+        local BASE_DOMAIN=${INPUT_DOMAIN#www.}
         # 为www和非www版本的域名发出证书
         $ACME_HOME/acme.sh --issue -d ${INPUT_DOMAIN} -d ${BASE_DOMAIN} --nginx --debug
     else
