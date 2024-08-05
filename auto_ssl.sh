@@ -164,7 +164,7 @@ server {
 #     server_name ${SERVER_NAME};
     
 #     # 重定向所有 HTTP 请求到 HTTPS
-#     return 301 https://'$server_name$request_uri';
+#     return 301 https://\$server_name\$request_uri;
 # }
 
 # server {
