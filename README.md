@@ -24,6 +24,7 @@
     - [11.3. checke version](#113-checke-version)
     - [11.4. Download Appoint Release Assets](#114-download-appoint-release-assets)
 - [12. Checke ssl/tls cert express date](#12-checke-ssltls-cert-express-date)
+- [Ubuntu20+ add user](#ubuntu20-add-user)
 
 <!-- /TOC -->
 
@@ -141,3 +142,6 @@ wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_scrip
 ```
 wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/check_cert.sh && chmod a+x ./check_cert.sh && ./check_cert.sh ${/path/to/your/certificate.crt} && rm -rf ./check_cert.sh
 ```
+
+# Ubuntu20+ add user
+```wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/ubuntu20+adduser_to_login.sh && chmod a+x ./ubuntu20+adduser_to_login.sh && ./ubuntu20+adduser_to_login.sh <username> "<ssh_public_key>"```
