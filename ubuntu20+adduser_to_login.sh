@@ -33,19 +33,16 @@ sed -i "s/# User rules for .*/# User rules for $USERNAME/g" $NEW_SUDOERS_FILE
 # 设置新 sudoers 文件为只读
 chmod 440 $NEW_SUDOERS_FILE
 
-# 切换到新用户并设置 SSH 公钥
-sudo -u $USERNAME bash << EOF
+# 切换到新用户并设置 SSH 公钥，然后返回 root 用户
+su - $USERNAME -c "
 # 创建 .ssh 目录
 mkdir -p /home/$USERNAME/.ssh
 chmod 700 /home/$USERNAME/.ssh
 
 # 将公钥添加到 authorized_keys 文件中
-echo "$SSH_PUBLIC_KEY" > /home/$USERNAME/.ssh/authorized_keys
+echo '$SSH_PUBLIC_KEY' > /home/$USERNAME/.ssh/authorized_keys
 chmod 600 /home/$USERNAME/.ssh/authorized_keys
-EOF
-
-# 退出用户 并到主目录
-exit && cd ~
+"
 
 # 确保新用户的主目录及其内容的所有权正确
 chown -R $USERNAME:$USERNAME /home/$USERNAME/.ssh
