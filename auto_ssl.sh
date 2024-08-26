@@ -140,8 +140,7 @@ function create_nginx_vhost(){
     if [[ ${BASE_DOMAIN} != "no" ]]; then
         SERVER_NAME="${INPUT_DOMAIN} ${BASE_DOMAIN}"
     fi
-
-cat << EOF | sudo tee /etc/nginx/conf.d/$INPUT_DOMAIN.conf
+NGINX_CONFIG_TEMPLATE=$(cat << EOF
 server {
     listen       80;
     server_name ${SERVER_NAME};
@@ -193,7 +192,17 @@ server {
 #     error_log ${NGINX_WEB_ROOT}/${INPUT_DOMAIN}/logs/error.log;
 # }
 EOF
+)
 
+  TARGET_FILE="/etc/nginx/conf.d/$INPUT_DOMAIN.conf"
+  AUTO_SSL_FILE="/etc/nginx/conf.d/$INPUT_DOMAIN.conf.autossl"
+  if [[ -f $TARGET_FILE ]]; then
+      echo "File $TARGET_FILE exists. Writing to $AUTO_SSL_FILE."
+      echo "$NGINX_CONFIG_TEMPLATE" | sudo tee $AUTO_SSL_FILE
+  else
+      echo "File $TARGET_FILE does not exist. Writing to $TARGET_FILE."
+      echo "$NGINX_CONFIG_TEMPLATE" | sudo tee $TARGET_FILE
+  fi
 
     mkdir -p $NGINX_WEB_ROOT/${INPUT_DOMAIN}/cert
     mkdir -p $NGINX_WEB_ROOT/${INPUT_DOMAIN}/web_root
