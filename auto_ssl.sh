@@ -72,7 +72,7 @@ function handle_logrotate() {
 
 
 function pre_config(){
-    sudo apt update && wait && sudo apt install -y unzip zip wget curl gnupg lsb-release socat
+    sudo apt update && wait && sudo apt install -y unzip zip wget curl gnupg lsb-release socat certbot
 }
 
 function nginx_is_runing(){
