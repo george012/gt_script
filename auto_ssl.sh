@@ -72,7 +72,7 @@ function handle_logrotate() {
 
 
 function pre_config(){
-    sudo apt update && wait && sudo apt install -y unzip zip wget curl gnupg lsb-release certbot
+    sudo apt update && wait && sudo apt install -y net-tools vim sysstat unzip zip wget curl gnupg lsb-release certbot cron
 }
 
 function nginx_is_runing(){
@@ -256,7 +256,7 @@ function request_cert(){
         $ACME_HOME/acme.sh --issue -d ${INPUT_DOMAIN} -d ${BASE_DOMAIN} --nginx --debug
     else
         # 只为输入的域名发出证书
-        $ACME_HOME/acme.sh --issue -d ${INPUT_DOMAIN} --nginx --debug
+        bash $ACME_HOME/acme.sh --issue -d ${INPUT_DOMAIN} --nginx --debug
     fi
 }
 
