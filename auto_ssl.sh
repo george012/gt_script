@@ -218,7 +218,11 @@ EOF
 }
 
 install_acme(){
-    curl https://get.acme.sh | sh -s email=$INPUT_EMAIL
+    if [ -d "$HOME/.acme.sh" ]; then
+        echo "acme.sh 已经安装，跳过安装步骤。"
+    else
+        curl https://get.acme.sh | sh -s email=$INPUT_EMAIL
+    fi
 }
 
 function handleDefault {
