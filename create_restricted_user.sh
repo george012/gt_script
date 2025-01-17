@@ -36,4 +36,4 @@ function create_user {
     echo "User $USERNAME created with restricted access to /usr/local/$USERNAME and SSH public key authentication."
 }
 
-create_user $1 $2 && wait && rm -rf $SCRIPT_NAME
+create_user "$1" "$2" && wait && rm -rf $SCRIPT_NAME
