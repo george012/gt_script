@@ -13,7 +13,7 @@ PUB_KEY=$2
 
 # 创建新用户，但不创建默认的 /home/<username> 目录
 # --no-create-home 确保不创建默认的 /home/<username> 目录
-sudo useradd --no-create-home -d /usr/local/$USERNAME -m $USERNAME
+sudo useradd --no-create-home -d /usr/local/$USERNAME $USERNAME
 
 # 设置用户的 shell
 sudo usermod -s /bin/bash $USERNAME
