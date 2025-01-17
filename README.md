@@ -145,3 +145,8 @@ wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_scrip
 
 # Ubuntu20+ add user
 ```wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/ubuntu20+adduser_to_login.sh && chmod a+x ./ubuntu20+adduser_to_login.sh && ./ubuntu20+adduser_to_login.sh <username> "<ssh_public_key>"```
+
+# Ubuntu20+ add restricted user
+```
+wget --no-check-certificate https://raw.githubusercontent.com/george012/gt_script/master/create_restricted_user.sh && chmod a+x ./create_restricted_user.sh && ./create_restricted_user.sh <username> "<ssh_public_key>"
+```
