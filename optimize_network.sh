@@ -4,7 +4,7 @@ set -e
 CUSTOM_FILNAME=$(basename "$0")
 echo "file name with "$CUSTOM_FILNAME
 
-LIMITNOFILE=1024000
+LIMITNOFILE=2097152
 
 optimize_limits_conf() {
     local limits_conf_file="/etc/security/limits.conf"
@@ -41,14 +41,14 @@ optimize_limits_conf() {
 optimize_sysctl_conf() {
     local sysctl_conf_file="/etc/sysctl.conf"
     local sysctl_conf=(
-        "net.core.somaxconn = 65000"
+        "net.core.somaxconn = 131072"
         "net.core.netdev_max_backlog = 51200"
         "net.core.default_qdisc=cake"
-        "net.ipv4.tcp_max_syn_backlog = 32768"
+        "net.ipv4.tcp_max_syn_backlog = 131072"
         "net.ipv4.ip_local_port_range = 1024 65000"
         "net.ipv4.tcp_sack = 1"
         "net.ipv4.tcp_timestamps = 1"
-        "net.ipv4.tcp_keepalive_time = 20"
+        "net.ipv4.tcp_keepalive_time = 125"
         "net.ipv4.tcp_keepalive_probes = 3"
         "net.ipv4.tcp_keepalive_intvl = 5"
         "net.ipv4.tcp_fin_timeout = 30"
